@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">P2PChat</string>
+    <string name="app_name">OffChat</string>
     <string name="invite_title">Invite more people to the chat</string>
 </resources>
