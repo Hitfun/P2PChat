@@ -88,11 +88,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 serverSocket = new ServerSocket(PORT);
             }catch(Exception e){
                 e.printStackTrace();
-
             }
-
-
-
             getClientInfo.execute();
 
         }else{
@@ -100,13 +96,11 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             try{
                 InetAddress groupOwner=info.groupOwnerAddress;
                 socket = new Socket(groupOwner,PORT);
-                fromGroupOwner=new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                toGroupOwner= new PrintWriter(socket.getOutputStream(),true);
+                fromGroupOwner = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                toGroupOwner = new PrintWriter(socket.getOutputStream(),true);
                 toGroupOwner.println(name);
 
                 listenToGroupOwner.execute();
-
-
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -122,13 +116,13 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 Socket clientSocket = serverSocket.accept();
                 BufferedReader dataIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 PrintWriter dataOut = new PrintWriter(clientSocket.getOutputStream(),true);
-                String clientName= dataIn.readLine();
-                ChatClient client = new ChatClient(clientName,dataIn,dataOut);
+                String clientName = dataIn.readLine();
+                ChatClient client = new ChatClient(clientName, dataIn, dataOut);
                 client.startListening();
 
                 clients.add(client);
 
-                if(clients.size()==1){
+                if(clients.size() == 1){
                     getSupportActionBar().setTitle(clientName);
                 }else{
                     getSupportActionBar().setTitle("Group Chat");
@@ -149,7 +143,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             try{
                 while(true){
                     String data;
-                    if((data=fromGroupOwner.readLine())!=null){
+                    if((data = fromGroupOwner.readLine()) != null){
                         receive(data);
                     }
                 }
@@ -175,18 +169,21 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             String time = today.hour + ":" + today.minute;
 
             //add message to the list
-            ChatMessage ChatMessage = new ChatMessage(text.toString(), true, "", time);
-            Messages.add(ChatMessage);
+            ChatMessage chatMessage = new ChatMessage(text.toString(), true, "", time);
+            Messages.add(chatMessage);
             adapter.notifyDataSetChanged();
             editText.setText("");
-            /*TODO: Send your message "text" with your Name and a timestamp to the chat partners
+            /* DONE: Send your message "text" with your Name and a timestamp to the chat partners
              * If you are the group owner send your message to all chat partners in clients list.
              * If you are not the group owner send your message only to him
              */
             if(info.isGroupOwner){
-
-            }else{
-
+                for (ChatClient client:clients) {
+                    PrintWriter dataOut = client.getDataOut();
+                    dataOut.println(chatMessage.getJSONString(name));
+                }
+            } else {
+                toGroupOwner.println(chatMessage.getJSONString(name));
             }
 
 
@@ -215,18 +212,24 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
-    /* TODO: When a message is received, the following has to be done:
+    /* DONE: When a message is received, the following has to be done:
      * 1. If you are the group owner forward message to all other chat partners in the clients list
      * 2. Retreive the following values from the message: the "text", the "sender", the "time_stamp"
      * 3. Create a new ChatMessage msg = new ChatMessage(text.toString(), false, sender, time_stamp);
      * 4. Add this message to our message list: Messages.add(msg);
      * 5. Notify the adapter, so that it can draw the new message on the listview: adapter.notifyDataSetChanged();
     */
-    public static void receive(String data){
+    public void receive(String data){
+        ChatMessage chatMessage = new ChatMessage(data);
+        Messages.add(chatMessage);
+        adapter.notifyDataSetChanged();
         if(info.isGroupOwner){
-
-        }else{
-
+            for (ChatClient client: clients) {
+                if (!client.getName().equals(chatMessage.getSender())) {
+                    PrintWriter dataOut = client.getDataOut();
+                    dataOut.println(data);
+                }
+            }
         }
     }
 }
