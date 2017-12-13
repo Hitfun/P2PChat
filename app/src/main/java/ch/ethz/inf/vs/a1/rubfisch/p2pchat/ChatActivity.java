@@ -108,7 +108,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    AsyncTask<Void,Void,Void> getClientInfo =new AsyncTask<Void, Void, Void>() {
+    AsyncTask<Void,Void,Void> getClientInfo = new AsyncTask<Void, Void, Void>() {
         @Override
         protected Void doInBackground(Void... voids) {
 
