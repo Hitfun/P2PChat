@@ -2,6 +2,7 @@ package ch.ethz.inf.vs.a1.rubfisch.p2pchat;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
@@ -45,6 +46,7 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Peer
     private ArrayAdapter<String> WifiP2parrayAdapter;
     private WifiP2pDevice ConnectedPartner;
     private int PORT = 8888;
+    private String TAG = "##BoadcastReceiverAct";
 
     private PeerListListener peerListListener = new PeerListListener() {
         @Override
@@ -164,7 +166,7 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Peer
                                         .put("type", "connection request")
                                         .put("name", name).toString();
                             } catch (JSONException e) {
-                                Log.d("##BroadcastRecieverAct", "creating connection request failed :" + e.getMessage());
+                                Log.d(TAG, "creating connection request failed :" + e.getMessage());
                             }
                             dataOut.println(request);
                             String in;
@@ -178,7 +180,10 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Peer
                                             ack = "";
                                         }
                                         if (ack.equals("ack")) {
-                                            //TODO: transition to ChatActivity
+                                            Intent intent = new Intent(BroadcastReceiverActivity.this, ChatActivity.class);
+                                            //TODO: Give necessary info to Intent
+                                            startActivity(intent);
+                                            Log.d(TAG, "Transitioning to Chat Activity");
                                             break;
                                         } else if (ack.equals("decline")) {
                                             //TODO: *name* declined
@@ -270,15 +275,19 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Peer
                         }
                         if (request.equals("connection request")) {
                             //TODO: *name* wants to connect to you. (Accept/Decline)
+                            //For now is accepts automatically
                             String ack = "";
                             try {
                                 ack = new JSONObject()
                                         .put("type", "ack").toString();
                             } catch (JSONException e) {
-                                Log.d("##BroadcastRecieverAct", "creating ack failed :" + e.getMessage());
+                                Log.d(TAG, "creating ack failed :" + e.getMessage());
                             }
                             dataOut.println(ack);
-                            //TODO: transition to ChatActivity
+                            Intent intent = new Intent(BroadcastReceiverActivity.this, ChatActivity.class);
+                            //TODO: Give necessary info to intent.
+                            startActivity(intent);
+                            Log.d(TAG, "Transitioning to Chat Activity");
                             break;
                         }
                     }

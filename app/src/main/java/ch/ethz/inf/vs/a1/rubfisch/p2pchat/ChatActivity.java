@@ -32,12 +32,12 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     private ListView listView;
     //boolean myMessage = true;
-    private List<ChatMessage> Messages;
-    private ArrayAdapter<ChatMessage> adapter;
+    static private List<ChatMessage> Messages;
+    static private ArrayAdapter<ChatMessage> adapter;
     static private WifiP2pInfo info;
     private WifiP2pManager.Channel channel;
     private WifiP2pManager manager;
-    private List<ChatClient> clients;
+    static private List<ChatClient> clients;
     private ServerSocket serverSocket;
     private Socket socket;
     private String name;
@@ -94,7 +94,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         }else{
             //make contact with group owner
             try{
-                InetAddress groupOwner=info.groupOwnerAddress;
+                InetAddress groupOwner = info.groupOwnerAddress;
                 socket = new Socket(groupOwner,PORT);
                 fromGroupOwner = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 toGroupOwner = new PrintWriter(socket.getOutputStream(),true);
@@ -219,7 +219,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
      * 4. Add this message to our message list: Messages.add(msg);
      * 5. Notify the adapter, so that it can draw the new message on the listview: adapter.notifyDataSetChanged();
     */
-    public void receive(String data){
+    public static void receive(String data){
         ChatMessage chatMessage = new ChatMessage(data);
         Messages.add(chatMessage);
         adapter.notifyDataSetChanged();
