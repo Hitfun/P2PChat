@@ -287,6 +287,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         ChatMessage chatMessage = new ChatMessage(data);
         Log.d("Chat",chatMessage.getText());
         Messages.add(chatMessage);
+        updateOnMain();
+
         /*if(info.isGroupOwner){
             for (ChatClient client: clients) {
                 if (!client.getName().equals(chatMessage.getSender())) {
@@ -318,7 +320,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public static Handler UIHandler = new Handler(Looper.getMainLooper());
-    public static void setText(final int idx,final String str) {
+    public static void updateOnMain() {
         UIHandler.post(new Runnable() {
             @Override
             public void run() {
