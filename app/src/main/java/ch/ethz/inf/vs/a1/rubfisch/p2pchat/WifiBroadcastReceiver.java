@@ -24,6 +24,7 @@ import java.util.List;
 
 public class WifiBroadcastReceiver extends BroadcastReceiver {
 
+    private String TAG = "##WifiBR";
     private WifiP2pManager mManager;
     private Channel mChannel;
     private Activity mActivity;
@@ -60,6 +61,10 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
                 mManager.requestPeers(mChannel, myPeerListListener);
             }
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
+            Log.d(TAG, "connection changed");
+            mManager.requestConnectionInfo(mChannel, (WifiP2pManager.ConnectionInfoListener) mActivity);
+
+
             // Respond to new connection or disconnections
 
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
