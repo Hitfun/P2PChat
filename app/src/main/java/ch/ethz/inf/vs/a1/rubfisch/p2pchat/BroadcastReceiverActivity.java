@@ -58,13 +58,19 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Wifi
         public void onPeersAvailable(WifiP2pDeviceList peerList) {
             Log.d("INPeerListListener", "Works");
             // Out with the old, in with the new.
+            ArrayList<WifiP2pDevice> peersNameFixed = new ArrayList<WifiP2pDevice>();
+
+            for (WifiP2pDevice peer : peerList.getDeviceList()) {
+                String newDeviceName = peer.deviceName.replace("[Phone]","");
+                peer.deviceName = newDeviceName;
+            }
             peers = new WifiP2pDeviceList(peerList);
+
             WifiP2parrayAdapter.clear();
             for (WifiP2pDevice peer : peerList.getDeviceList()) {
 
-                String newDeviceName = peer.deviceName.replace("[Phone]","");
-                WifiP2parrayAdapter.add(newDeviceName); //+ "\n" + peer.deviceAddress
-                Log.d("INPeerListListenerNAME:", newDeviceName);
+                WifiP2parrayAdapter.add(peer.deviceName); //+ "\n" + peer.deviceAddress
+                Log.d("INPeerListListenerNAME:", peer.deviceName);
                 // set textbox search_result.setText(peer.deviceName);
 
 
@@ -183,7 +189,6 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Wifi
                         device = wd;
                 }
                 if(device != null)
-
                 {
                     Log.d(TAG, " calling connectToPeer");
                     //Connect to selected peer
@@ -210,10 +215,8 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Wifi
     public void connectToPeer(final WifiP2pDevice wifiPeer)
     {
         this.ConnectedPartner = wifiPeer;
-
         final WifiP2pConfig config = new WifiP2pConfig();
         config.deviceAddress = wifiPeer.deviceAddress;
-        Log.d(TAG, "connecting to peer");
         mManager.connect(mChannel, config, new WifiP2pManager.ActionListener()  {
             public void onSuccess() {
                 /*Log.d(TAG, "Transitioning to Chat Activity");
@@ -313,10 +316,8 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Wifi
     public void onConnectionInfoAvailable(WifiP2pInfo info) {
         Log.d(TAG, "pre connect " + Boolean.toString(info.groupFormed));
         if (info.groupFormed) {
-            Log.d(TAG, "Transitioning to Chat Activity(cia)");
             Intent intent = new Intent(BroadcastReceiverActivity.this, ChatActivity.class);
             intent.putExtra("info", info);
-
             startActivityForResult(intent, 1);
         }
 
@@ -366,7 +367,7 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Wifi
         });
     }
 
-    AsyncTask<Void, Void, Void> receiveConnectRequest = new AsyncTask<Void, Void, Void>() {
+     AsyncTask<Void, Void, Void> receiveConnectRequest = new AsyncTask<Void, Void, Void>() {
         @Override
         protected Void doInBackground(Void... voids) {
             try {
