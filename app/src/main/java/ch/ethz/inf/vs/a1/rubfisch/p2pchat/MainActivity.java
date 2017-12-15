@@ -33,8 +33,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, BroadcastReceiverActivity.class);
         EditText editText = (EditText) findViewById(R.id.editText);
         String message = editText.getText().toString();
-        intent.putExtra("nameText", message);
-
+        if (!message.trim().equals("")){
+            intent.putExtra("nameText", message);
+    }
         startActivity(intent);
     }
 }
