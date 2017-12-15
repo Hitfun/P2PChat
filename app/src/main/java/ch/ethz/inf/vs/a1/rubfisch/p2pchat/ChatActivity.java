@@ -7,6 +7,8 @@ import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.Time;
@@ -285,7 +287,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         ChatMessage chatMessage = new ChatMessage(data);
         Log.d("Chat",chatMessage.getText());
         Messages.add(chatMessage);
-        adapter.notifyDataSetChanged();
         /*if(info.isGroupOwner){
             for (ChatClient client: clients) {
                 if (!client.getName().equals(chatMessage.getSender())) {
@@ -314,5 +315,15 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         }
 
+    }
+
+    public static Handler UIHandler = new Handler(Looper.getMainLooper());
+    public static void setText(final int idx,final String str) {
+        UIHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 }
