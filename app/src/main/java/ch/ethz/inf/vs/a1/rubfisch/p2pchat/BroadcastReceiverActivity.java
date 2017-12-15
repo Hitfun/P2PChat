@@ -27,6 +27,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -84,6 +85,22 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Peer
         Bundle extras = getIntent().getExtras();
         name = extras.getString("nameText");
         Log.d("name", name);
+        try {
+            Method m = mManager.getClass().getMethod("setDeviceName", new Class[]{Channel.class, String.class,
+                    WifiP2pManager.ActionListener.class});
+            m.invoke(mManager, mChannel, name, new WifiP2pManager.ActionListener() {
+
+                @Override
+                public void onSuccess() {
+                }
+
+                @Override
+                public void onFailure(int reason) {
+                }
+            });
+        } catch (Exception e) {
+            Log.d(TAG, "No such method");
+        }
 
         mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(this, getMainLooper(), null);

@@ -13,6 +13,7 @@ import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.widget.Toast;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,16 +117,5 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
         });
     } */
 }
-/* Change device name
-Method m = manager.getClass().getMethod("setDeviceName", new Class[]     {channel.getClass(), String.class,
-                    WifiP2pManager.ActionListener.class});
-        m.invoke(manager, channel, newDeviceName, new WifiP2pManager.ActionListener() {
+//Change device name
 
-            @Override
-            public void onSuccess() {
-            }
-            @Override
-            public void onFailure(int reason) {
-            }
-    });
- */
