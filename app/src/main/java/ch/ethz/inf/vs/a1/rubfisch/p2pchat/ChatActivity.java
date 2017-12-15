@@ -237,6 +237,25 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         }
     }
+    AsyncTask<ChatMessage,Void,Void> sendMessage = new AsyncTask<ChatMessage, Void, Void>() {
+
+        @Override
+        protected Void doInBackground(ChatMessage... chatMessage)
+        {
+            if(info.isGroupOwner){
+                for (ChatClient client:clients) {
+                    PrintWriter dataOut = client.getDataOut();
+                    dataOut.println(chatMessage[0].getJSONString(name));
+                }
+            } else {
+                toGroupOwner.println(chatMessage[0].getJSONString(name));
+            }
+            return null;
+
+        }
+        @Override
+        protected void onPostExecute(Void v){ listenToGroupOwner.execute(); }
+    };
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
