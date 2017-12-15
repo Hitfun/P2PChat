@@ -1,22 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<TextView android:id="@+id/id"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_margin="@dimen/text_margin"
+    android:textAppearance="?attr/textAppearanceListItem"
+    xmlns:android="http://schemas.android.com/apk/res/android" />
 
-    <ImageButton
-        android:id="@+id/user_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:src="@drawable/ic_person_add_black_24dp"
-        android:background="#00000000"
-    />
-    <TextView
-        android:id="@+id/id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
 
-</LinearLayout>
