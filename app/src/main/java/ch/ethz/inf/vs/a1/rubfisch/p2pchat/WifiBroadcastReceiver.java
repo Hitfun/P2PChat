@@ -11,6 +11,7 @@ import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -29,11 +30,12 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
     //private List peers = new ArrayList();
 
     public WifiBroadcastReceiver(WifiP2pManager manager, Channel channel,
-                                       Activity activity) {
+                                       Activity activity, PeerListListener PLL) {
         super();
         this.mManager = manager;
         this.mChannel = channel;
         this.mActivity = activity;
+        this.myPeerListListener = PLL;
     }
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -53,6 +55,7 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
             // asynchronous call and the calling activity is notified with a
             // callback on PeerListListener.onPeersAvailable()
             if (mManager != null) {
+                Log.d("INWIFIBRECV", "requestedpeers");
                 mManager.requestPeers(mChannel, myPeerListListener);
             }
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
