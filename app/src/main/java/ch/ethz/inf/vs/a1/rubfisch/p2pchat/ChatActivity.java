@@ -225,14 +225,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
              * If you are the group owner send your message to all chat partners in clients list.
              * If you are not the group owner send your message only to him
              */
-            if(info.isGroupOwner){
-                for (ChatClient client:clients) {
-                    PrintWriter dataOut = client.getDataOut();
-                    dataOut.println(chatMessage.getJSONString(name));
-                }
-            } else {
-                toGroupOwner.println(chatMessage.getJSONString(name));
-            }
+            sendMessage.execute();
 
 
         }
@@ -245,10 +238,12 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             if(info.isGroupOwner){
                 for (ChatClient client:clients) {
                     PrintWriter dataOut = client.getDataOut();
-                    dataOut.println(chatMessage[0].getJSONString(name));
+                    //dataOut.println(chatMessage[0].getJSONString(name));
+                    dataOut.println("test1");
                 }
             } else {
-                toGroupOwner.println(chatMessage[0].getJSONString(name));
+                //toGroupOwner.println(chatMessage[0].getJSONString(name));
+                toGroupOwner.println("test2");
             }
             return null;
 
@@ -287,16 +282,18 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     */
     public static void receive(String data){
         ChatMessage chatMessage = new ChatMessage(data);
+        Log.d("Chat",chatMessage.getText());
         Messages.add(chatMessage);
         adapter.notifyDataSetChanged();
-        if(info.isGroupOwner){
+        /*if(info.isGroupOwner){
             for (ChatClient client: clients) {
                 if (!client.getName().equals(chatMessage.getSender())) {
                     PrintWriter dataOut = client.getDataOut();
                     dataOut.println(data);
+
                 }
             }
-        }
+        }*/
     }
     /*public void onBackPressed() {
 
