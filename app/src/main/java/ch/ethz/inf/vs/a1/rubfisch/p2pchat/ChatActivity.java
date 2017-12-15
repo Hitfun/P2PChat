@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -72,20 +73,19 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         info = (WifiP2pInfo) bundle.get("info");
+        initialize();
         //manager.requestConnectionInfo(channel,this);
     }
 
     @Override
     public void onConnectionInfoAvailable(WifiP2pInfo information) {
-        info = information;
-        if(info.groupOwnerAddress != groupOwner) {
-            groupOwner=info.groupOwnerAddress;
-            initialize();
-        }
+
     }
 
     public void initialize (){
-        clients.clear();
+
+        Log.d("CHat", "is GroupOwner?" + Boolean.toString(info.isGroupOwner));
+        if(clients != null) {    clients.clear();}
         if(info.isGroupOwner){
             //wait for clients to make contact and add them to a list
             try {
