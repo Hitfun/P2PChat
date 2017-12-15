@@ -15,15 +15,13 @@ public class ChatClient {
     private PrintWriter dataOut;
     private String name;
     private Listener listener;
-    private ArrayAdapter adapter;
 
-    public ChatClient(String name,BufferedReader dataIn,PrintWriter dataOut,ArrayAdapter adapter){
+    public ChatClient(String name,BufferedReader dataIn,PrintWriter dataOut){
         this.dataIn=dataIn;
         this.dataOut=dataOut;
         this.name=name;
-        this.adapter=adapter;
 
-        listener=new Listener(dataIn,adapter);
+        listener=new Listener(dataIn);
     }
 
     public String getName(){return name;}
