@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
+import android.net.wifi.p2p.WifiP2pGroup;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
@@ -91,7 +92,29 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Wifi
         mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(this, getMainLooper(), null);
         mReceiver = new WifiBroadcastReceiver(mManager, mChannel, this, peerListListener);  //Setting up Wifi Receiver
-        mManager.requestConnectionInfo(mChannel, this);
+
+        if (mManager != null && mChannel != null) {
+            mManager.requestGroupInfo(mChannel, new WifiP2pManager.GroupInfoListener() {
+                @Override
+                public void onGroupInfoAvailable(WifiP2pGroup group) {
+                    if (group != null && mManager != null && mChannel != null) {
+                        mManager.removeGroup(mChannel, new WifiP2pManager.ActionListener() {
+
+                            @Override
+                            public void onSuccess() {
+                                Log.d(TAG, "removeGroup onSuccess -");
+                            }
+
+                            @Override
+                            public void onFailure(int reason) {
+                                Log.d(TAG, "removeGroup onFailure -" + reason);
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
         mIntentFilter = new IntentFilter();
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
@@ -168,6 +191,7 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Wifi
 
 
     }
+
 
     public void connectToPeer(final WifiP2pDevice wifiPeer)
     {
@@ -278,11 +302,38 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Wifi
             Log.d(TAG, "Transitioning to Chat Activity(cia)");
             Intent intent = new Intent(BroadcastReceiverActivity.this, ChatActivity.class);
             intent.putExtra("info", info);
-            startActivity(intent);
+
+            startActivityForResult(intent, 1);
         }
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (mManager != null && mChannel != null) {
+                mManager.requestGroupInfo(mChannel, new WifiP2pManager.GroupInfoListener() {
+                    @Override
+                    public void onGroupInfoAvailable(WifiP2pGroup group) {
+                        if (group != null && mManager != null && mChannel != null) {
+                            mManager.removeGroup(mChannel, new WifiP2pManager.ActionListener() {
+
+                                @Override
+                                public void onSuccess() {
+                                    Log.d(TAG, "removeGroup onSuccess2 -");
+                                }
+
+                                @Override
+                                public void onFailure(int reason) {
+                                    Log.d(TAG, "removeGroup onFailure2 -" + reason);
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        }
+    }
 
 
 
@@ -310,7 +361,7 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Wifi
                 BufferedReader dataIn = new BufferedReader(new InputStreamReader(client.getInputStream()));
                 PrintWriter dataOut = new PrintWriter(client.getOutputStream(), true);
                 String in;
-                while(true) {
+                while (true) {
                     if ((in = dataIn.readLine()) != null) {
                         String request;
                         String name;
@@ -345,9 +396,6 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Wifi
                 e.printStackTrace();
             }
             return null;
-
         }
-
     };
-
 }
