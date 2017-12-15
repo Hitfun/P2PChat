@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -21,22 +23,50 @@ public class MainActivity extends AppCompatActivity {
         bv.setBackgroundColor(getResources().getColor(R.color.colorLightGrey));
 
         EditText editText = (EditText) findViewById(R.id.editText);
-        int greyColor =  getResources().getColor(R.color.colorGrey);
+        final int greyColor =  getResources().getColor(R.color.colorGrey);
         editText.setBackgroundColor(greyColor);
 
-        Button bt = (Button) findViewById(R.id.joinButton);
-        int orangeColor =  getResources().getColor(R.color.colorOrange);
-        bt.setBackgroundColor(orangeColor);
+        final Button button = (Button) findViewById(R.id.joinButton);
+        final int orangeColor =  getResources().getColor(R.color.colorOrange);
+        button.setBackgroundColor(greyColor);
+
+        editText.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if(s.toString().trim().length()==0){
+                    button.setEnabled(false);
+                    button.setBackgroundColor(greyColor);
+                } else {
+                    button.setEnabled(true);
+                    button.setBackgroundColor(orangeColor);
+                }
+
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // TODO Auto-generated method stub
+
+            }
+        });
     }
 
     public void joinPressed(View view) {
         Intent intent = new Intent(MainActivity.this, BroadcastReceiverActivity.class);
         EditText editText = (EditText) findViewById(R.id.editText);
         String message = editText.getText().toString();
-        if (!message.trim().equals("")){
-            intent.putExtra("nameText", message);
-            startActivity(intent);
+        intent.putExtra("nameText", message);
+        startActivity(intent);
 
-        }
     }
 }
