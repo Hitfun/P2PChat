@@ -299,4 +299,20 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     /*public void onBackPressed() {
 
     }*/
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try{
+            if(info.isGroupOwner) {
+                serverSocket.close();
+            }else{
+                socket.close();
+
+            }
+        }catch(Exception e){
+
+        }
+
+    }
 }
