@@ -35,7 +35,8 @@ public class MainActivity extends AppCompatActivity {
         String message = editText.getText().toString();
         if (!message.trim().equals("")){
             intent.putExtra("nameText", message);
-    }
-        startActivity(intent);
+            startActivity(intent);
+
+        }
     }
 }
