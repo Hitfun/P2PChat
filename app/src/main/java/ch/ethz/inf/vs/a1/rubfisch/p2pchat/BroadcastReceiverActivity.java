@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
+import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
@@ -36,7 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class BroadcastReceiverActivity extends AppCompatActivity{
+public class BroadcastReceiverActivity extends AppCompatActivity implements WifiP2pManager.ConnectionInfoListener{
     WifiP2pManager mManager;
     Channel mChannel;
     BroadcastReceiver mReceiver;
@@ -90,6 +91,7 @@ public class BroadcastReceiverActivity extends AppCompatActivity{
         mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(this, getMainLooper(), null);
         mReceiver = new WifiBroadcastReceiver(mManager, mChannel, this, peerListListener);  //Setting up Wifi Receiver
+        mManager.requestConnectionInfo(mChannel, this);
         mIntentFilter = new IntentFilter();
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
@@ -134,6 +136,7 @@ public class BroadcastReceiverActivity extends AppCompatActivity{
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
                                     long arg3) {
+                Log.d(TAG, "item clicked");
                 //Get string from textview
                 TextView tv = (TextView) arg1;
                 WifiP2pDevice device = null;
@@ -143,7 +146,9 @@ public class BroadcastReceiverActivity extends AppCompatActivity{
                         device = wd;
                 }
                 if(device != null)
+
                 {
+                    Log.d(TAG, " calling connectToPeer");
                     //Connect to selected peer
                     connectToPeer(device);
 
@@ -170,10 +175,17 @@ public class BroadcastReceiverActivity extends AppCompatActivity{
 
         final WifiP2pConfig config = new WifiP2pConfig();
         config.deviceAddress = wifiPeer.deviceAddress;
+        Log.d(TAG, "connecting to peer");
         mManager.connect(mChannel, config, new WifiP2pManager.ActionListener()  {
             public void onSuccess() {
+                Log.d(TAG, "Transitioning to Chat Activity");
+                Intent intent = new Intent(BroadcastReceiverActivity.this, ChatActivity.class);
+                startActivity(intent);
+
+
+
                 // TODO: Msg saying "Waiting for *name* to respond."
-                AsyncTask<Void, Void, Void> sendConnectRequest = new AsyncTask<Void, Void, Void>() {
+                /*AsyncTask<Void, Void, Void> sendConnectRequest = new AsyncTask<Void, Void, Void>() {
                     @Override
                     protected Void doInBackground(Void... voids) {
                         try {
@@ -223,8 +235,10 @@ public class BroadcastReceiverActivity extends AppCompatActivity{
                         return null;
                     }
                 };
+
                 sendConnectRequest.execute();
                 //setClientStatus("Connection to " + targetDevice.deviceName + " sucessful");
+                */
             }
 
             public void onFailure(int reason) {
@@ -255,6 +269,15 @@ public class BroadcastReceiverActivity extends AppCompatActivity{
 
         //do something with the device list
     }*/
+
+    @Override
+    public void onConnectionInfoAvailable(WifiP2pInfo info) {
+        Log.d(TAG, "Transitioning to Chat Activity(cia)");
+        Intent intent = new Intent(BroadcastReceiverActivity.this, ChatActivity.class);
+        intent.putExtra("info", info);
+        startActivity(intent);
+
+    }
 
 
 

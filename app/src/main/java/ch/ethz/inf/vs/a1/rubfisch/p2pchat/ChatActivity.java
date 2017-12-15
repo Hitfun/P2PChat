@@ -1,5 +1,6 @@
 package ch.ethz.inf.vs.a1.rubfisch.p2pchat;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.wifi.p2p.WifiP2pInfo;
@@ -68,7 +69,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         listView.setAdapter(adapter);
 
         //TODO: Get the P2pManager and Channel Objects and your own name for the connection information
-        manager.requestConnectionInfo(channel,this);
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        info = (WifiP2pInfo) bundle.get("info");
+        //manager.requestConnectionInfo(channel,this);
     }
 
     @Override
