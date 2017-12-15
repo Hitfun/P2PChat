@@ -253,8 +253,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             return null;
 
         }
-        @Override
-        protected void onPostExecute(Void v){ listenToGroupOwner.execute(); }
+
     };
 
     @Override
