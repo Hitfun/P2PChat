@@ -7,6 +7,7 @@ import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.Time;
 import android.util.Log;
@@ -30,7 +31,10 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 public class ChatActivity extends AppCompatActivity implements View.OnClickListener, WifiP2pManager.ConnectionInfoListener{
 
@@ -70,6 +74,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         //set ListView adapter first
         adapter = new ChatMessageAdapter(this, R.layout.foreign_bubble, Messages);
         listView.setAdapter(adapter);
+
+        clients=new ArrayList<>();
 
         //TODO: Get the P2pManager and Channel Objects and your own name for the connection information
         Intent intent = getIntent();
