@@ -1,6 +1,7 @@
 package ch.ethz.inf.vs.a1.rubfisch.p2pchat;
 
 import android.content.Context;
+import android.widget.ArrayAdapter;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
@@ -14,13 +15,15 @@ public class ChatClient {
     private PrintWriter dataOut;
     private String name;
     private Listener listener;
+    private ArrayAdapter adapter;
 
-    public ChatClient(String name,BufferedReader dataIn,PrintWriter dataOut){
+    public ChatClient(String name,BufferedReader dataIn,PrintWriter dataOut,ArrayAdapter adapter){
         this.dataIn=dataIn;
         this.dataOut=dataOut;
         this.name=name;
+        this.adapter=adapter;
 
-        listener=new Listener(dataIn);
+        listener=new Listener(dataIn,adapter);
     }
 
     public String getName(){return name;}

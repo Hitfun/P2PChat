@@ -156,7 +156,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 BufferedReader dataIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 PrintWriter dataOut = new PrintWriter(clientSocket.getOutputStream(),true);
                 String clientName = dataIn.readLine();
-                ChatClient client = new ChatClient(clientName, dataIn, dataOut);
+                ChatClient client = new ChatClient(clientName, dataIn, dataOut,adapter);
                 client.startListening();
 
                 clients.add(client);
