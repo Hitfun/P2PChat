@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class BroadcastReceiverActivity extends AppCompatActivity implements PeerListListener {
+public class BroadcastReceiverActivity extends AppCompatActivity{
     WifiP2pManager mManager;
     Channel mChannel;
     BroadcastReceiver mReceiver;
@@ -52,7 +52,7 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Peer
     private PeerListListener peerListListener = new PeerListListener() {
         @Override
         public void onPeersAvailable(WifiP2pDeviceList peerList) {
-
+            Log.d("INPeerListListener", "Works");
             // Out with the old, in with the new.
             peers = new WifiP2pDeviceList(peerList);
             WifiP2parrayAdapter.clear();
@@ -60,7 +60,7 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Peer
 
 
                 WifiP2parrayAdapter.add(peer.deviceName); //+ "\n" + peer.deviceAddress
-
+                Log.d("INPeerListListenerNAME:", peer.deviceName);
                 // set textbox search_result.setText(peer.deviceName);
 
 
@@ -104,12 +104,13 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Peer
 
         mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(this, getMainLooper(), null);
-        mReceiver = new WifiBroadcastReceiver(mManager, mChannel, this);  //Setting up Wifi Receiver
+        mReceiver = new WifiBroadcastReceiver(mManager, mChannel, this, peerListListener);  //Setting up Wifi Receiver
         mIntentFilter = new IntentFilter();
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+
         mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
@@ -243,13 +244,13 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Peer
         unregisterReceiver(mReceiver);
     }
 
-    @Override
+  /*  @Override
     public void onPeersAvailable(WifiP2pDeviceList peerList) {
         List<WifiP2pDevice> devices = (new ArrayList<>());
         devices.addAll(peerList.getDeviceList());
 
         //do something with the device list
-    }
+    }*/
 
 
 
