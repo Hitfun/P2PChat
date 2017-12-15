@@ -225,7 +225,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
              * If you are the group owner send your message to all chat partners in clients list.
              * If you are not the group owner send your message only to him
              */
-            sendMessage.execute();
+            sendMessage.execute(chatMessage);
 
 
         }
@@ -238,12 +238,12 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             if(info.isGroupOwner){
                 for (ChatClient client:clients) {
                     PrintWriter dataOut = client.getDataOut();
-                    //dataOut.println(chatMessage[0].getJSONString(name));
-                    dataOut.println("test1");
+                    dataOut.println(chatMessage[0].getJSONString(name));
+                    //dataOut.println("test1");
                 }
             } else {
-                //toGroupOwner.println(chatMessage[0].getJSONString(name));
-                toGroupOwner.println("test2");
+                toGroupOwner.println(chatMessage[0].getJSONString(name));
+                //toGroupOwner.println("test2");
             }
             return null;
 
