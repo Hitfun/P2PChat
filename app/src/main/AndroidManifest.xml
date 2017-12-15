@@ -30,11 +30,7 @@
         </activity>
         <activity android:name=".BroadcastReceiverActivity"></activity>
         <activity android:name=".ChatActivity" android:windowSoftInputMode="adjustPan|stateHidden" android:configChanges="orientation|screenSize|keyboard">>
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 
