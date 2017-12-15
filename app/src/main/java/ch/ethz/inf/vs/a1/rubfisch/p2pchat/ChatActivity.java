@@ -280,4 +280,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
+    /*public void onBackPressed() {
+
+    }*/
 }
