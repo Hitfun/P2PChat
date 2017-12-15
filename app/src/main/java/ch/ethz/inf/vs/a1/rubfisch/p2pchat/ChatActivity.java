@@ -166,7 +166,14 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             //get current time ( I used the deprecated Class Time to ensure backwards compatability)
             Time today = new Time(Time.getCurrentTimezone());
             today.setToNow();
-            String time = today.hour + ":" + today.minute;
+            String minute;
+            if (today.minute < 10) {
+                minute = "0" + String.valueOf(today.minute);
+            } else {
+                minute = String.valueOf(today.minute);
+            }
+
+            String time = today.hour + ":" + minute;
 
             //add message to the list
             ChatMessage chatMessage = new ChatMessage(text.toString(), true, "", time);
