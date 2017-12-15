@@ -19,6 +19,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -60,9 +62,9 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Wifi
             WifiP2parrayAdapter.clear();
             for (WifiP2pDevice peer : peerList.getDeviceList()) {
 
-
-                WifiP2parrayAdapter.add(peer.deviceName); //+ "\n" + peer.deviceAddress
-                Log.d("INPeerListListenerNAME:", peer.deviceName);
+                String newDeviceName = peer.deviceName.replace("[Phone]","");
+                WifiP2parrayAdapter.add(newDeviceName); //+ "\n" + peer.deviceAddress
+                Log.d("INPeerListListenerNAME:", newDeviceName);
                 // set textbox search_result.setText(peer.deviceName);
 
 
@@ -83,11 +85,20 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Wifi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_broadcast_receiver);
 
+
+        View bv = findViewById(R.id.broadcastActivity);
+        bv.setBackgroundColor(getResources().getColor(R.color.colorLightGrey));
+
+
+
         // get name entered by user in MainActivity
         Bundle extras = getIntent().getExtras();
         name = extras.getString("nameText");
-        Log.d("name", name);
 
+        TextView youAreLoggedInTextView = (TextView) findViewById(R.id.loggedIn);
+        youAreLoggedInTextView.setText("You are logged in as " +  name);
+
+        getSupportActionBar().setTitle("New Chat");
 
         mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(this, getMainLooper(), null);
@@ -152,7 +163,10 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Wifi
             }
         });
         mListView = (ListView) findViewById(R.id.ListView);
-        WifiP2parrayAdapter = new ArrayAdapter<String>(this, R.layout.fragment_peer);
+        TextView emptyText = (TextView)findViewById(android.R.id.empty);
+        mListView.setEmptyView(emptyText);
+        WifiP2parrayAdapter = new ArrayAdapter<String>(this, R.layout.fragment_peer, R.id.textView);
+
         mListView.setAdapter(WifiP2parrayAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -161,7 +175,7 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Wifi
                                     long arg3) {
                 Log.d(TAG, "item clicked");
                 //Get string from textview
-                TextView tv = (TextView) arg1;
+                TextView tv = ((LinearLayout) arg1).findViewById(R.id.textView);
                 WifiP2pDevice device = null;
                 for(WifiP2pDevice wd : peers.getDeviceList())
                 {
