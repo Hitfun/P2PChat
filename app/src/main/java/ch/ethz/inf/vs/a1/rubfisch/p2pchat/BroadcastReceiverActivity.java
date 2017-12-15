@@ -85,22 +85,7 @@ public class BroadcastReceiverActivity extends AppCompatActivity{
         Bundle extras = getIntent().getExtras();
         name = extras.getString("nameText");
         Log.d("name", name);
-        try {
-            Method m = mManager.getClass().getMethod("setDeviceName", new Class[]{Channel.class, String.class,
-                    WifiP2pManager.ActionListener.class});
-            m.invoke(mManager, mChannel, name, new WifiP2pManager.ActionListener() {
 
-                @Override
-                public void onSuccess() {
-                }
-
-                @Override
-                public void onFailure(int reason) {
-                }
-            });
-        } catch (Exception e) {
-            Log.d(TAG, "No such method");
-        }
 
         mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(this, getMainLooper(), null);
@@ -110,6 +95,25 @@ public class BroadcastReceiverActivity extends AppCompatActivity{
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+
+        try {
+            Method m = mManager.getClass().getMethod("setDeviceName", new Class[]{Channel.class, String.class,
+                    WifiP2pManager.ActionListener.class});
+            m.invoke(mManager, mChannel, name, new WifiP2pManager.ActionListener() {
+
+                @Override
+                public void onSuccess() {
+                    Log.d(TAG, "Name change successful.");
+                }
+
+                @Override
+                public void onFailure(int reason) {
+                    Log.d(TAG, "name change failed: " + reason);
+                }
+            });
+        } catch (Exception e) {
+            Log.d(TAG, "No such method");
+        }
 
         mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
             @Override
