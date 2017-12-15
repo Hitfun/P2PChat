@@ -55,7 +55,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         // Setup the Actionbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ff6e00")));
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FA8F16")));
 
         //Set Button listener
         ImageButton send = (ImageButton) findViewById(R.id.send);

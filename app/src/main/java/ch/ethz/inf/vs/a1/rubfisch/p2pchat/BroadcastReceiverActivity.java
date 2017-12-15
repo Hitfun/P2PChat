@@ -178,9 +178,10 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Wifi
         Log.d(TAG, "connecting to peer");
         mManager.connect(mChannel, config, new WifiP2pManager.ActionListener()  {
             public void onSuccess() {
-                Log.d(TAG, "Transitioning to Chat Activity");
+                /*Log.d(TAG, "Transitioning to Chat Activity");
                 Intent intent = new Intent(BroadcastReceiverActivity.this, ChatActivity.class);
-                startActivity(intent);
+                intent.putExtra("info", info);
+                startActivity(intent);*/
 
 
 
