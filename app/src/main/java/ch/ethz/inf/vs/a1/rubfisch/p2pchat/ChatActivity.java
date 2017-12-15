@@ -117,7 +117,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         protected Void doInBackground(Void... voids) {
 
             try{
+                Log.d("Chat","waiting for client");
                 Socket clientSocket = serverSocket.accept();
+                Log.d("Chat","Client found");
                 BufferedReader dataIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 PrintWriter dataOut = new PrintWriter(clientSocket.getOutputStream(),true);
                 String clientName = dataIn.readLine();
@@ -125,6 +127,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 client.startListening();
 
                 clients.add(client);
+
+                Log.d("Chat", "client added");
 
                 if(clients.size() == 1){
                     getSupportActionBar().setTitle(clientName);
