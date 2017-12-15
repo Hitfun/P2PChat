@@ -272,10 +272,13 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Wifi
 
     @Override
     public void onConnectionInfoAvailable(WifiP2pInfo info) {
-        Log.d(TAG, "Transitioning to Chat Activity(cia)");
-        Intent intent = new Intent(BroadcastReceiverActivity.this, ChatActivity.class);
-        intent.putExtra("info", info);
-        startActivity(intent);
+        Log.d(TAG, "pre connect " + Boolean.toString(info.groupFormed));
+        if (info.groupFormed) {
+            Log.d(TAG, "Transitioning to Chat Activity(cia)");
+            Intent intent = new Intent(BroadcastReceiverActivity.this, ChatActivity.class);
+            intent.putExtra("info", info);
+            startActivity(intent);
+        }
 
     }
 
