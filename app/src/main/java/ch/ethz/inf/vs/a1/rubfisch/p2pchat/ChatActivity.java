@@ -20,11 +20,13 @@ import android.widget.ListView;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -91,26 +93,51 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             try {
                 serverSocket = new ServerSocket(PORT);
             }catch(Exception e){
-                e.printStackTrace();
+                Log.d("CHat", "afterServerSocket: "+ e.getMessage());
+
             }
             getClientInfo.execute();
 
         }else{
             //make contact with group owner
             try{
-                InetAddress groupOwner = info.groupOwnerAddress;
-                socket = new Socket(groupOwner,PORT);
-                fromGroupOwner = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                toGroupOwner = new PrintWriter(socket.getOutputStream(),true);
-                toGroupOwner.println(name);
+                connectToOwner.execute();
 
-                listenToGroupOwner.execute();
+
             }catch(Exception e){
+                Log.d("CHat", "notGroupOwner "+ e.getMessage());
+
                 e.printStackTrace();
             }
 
         }
     }
+
+    AsyncTask<Void,Void,Void> connectToOwner = new AsyncTask<Void, Void, Void>()
+    {
+        @Override
+        protected Void doInBackground(Void... voids)
+        {
+            InetAddress groupOwner = info.groupOwnerAddress;
+            socket = new Socket();
+            try
+            {
+                socket.connect(new InetSocketAddress(groupOwner.getHostAddress(), PORT));
+                fromGroupOwner = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                toGroupOwner = new PrintWriter(socket.getOutputStream(), true);
+                toGroupOwner.println(name);
+            }
+             catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            return null;
+
+        }
+        @Override
+        protected void onPostExecute(Void v){ listenToGroupOwner.execute(); }
+    };
+
 
     AsyncTask<Void,Void,Void> getClientInfo = new AsyncTask<Void, Void, Void>() {
         @Override
