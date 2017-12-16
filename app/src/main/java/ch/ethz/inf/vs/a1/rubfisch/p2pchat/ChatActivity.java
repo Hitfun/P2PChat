@@ -38,7 +38,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class ChatActivity extends AppCompatActivity implements View.OnClickListener, WifiP2pManager.ConnectionInfoListener{
+public class ChatActivity extends AppCompatActivity implements View.OnClickListener{
 
     private ListView listView;
     //boolean myMessage = true;
@@ -83,14 +83,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         info = (WifiP2pInfo) bundle.get("info");
+        name= bundle.getString("name");
         initialize();
-        //manager.requestConnectionInfo(channel,this);
     }
 
-    @Override
-    public void onConnectionInfoAvailable(WifiP2pInfo information) {
-
-    }
 
     public void initialize (){
 
@@ -135,6 +131,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 toGroupOwner = new PrintWriter(socket.getOutputStream(), true);
                 toGroupOwner.println(name);
                 Log.d("Chat","Name sent to Owner");
+
+                String partnerName=fromGroupOwner.readLine();
+                getSupportActionBar().setTitle(partnerName);
+
             }
              catch (IOException e)
             {
@@ -160,6 +160,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 BufferedReader dataIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 PrintWriter dataOut = new PrintWriter(clientSocket.getOutputStream(),true);
                 String clientName = dataIn.readLine();
+                dataOut.println(name);
                 ChatClient client = new ChatClient(clientName, dataIn, dataOut);
                 client.startListening();
 

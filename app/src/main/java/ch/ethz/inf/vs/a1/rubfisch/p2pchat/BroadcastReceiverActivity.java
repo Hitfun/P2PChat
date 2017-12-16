@@ -318,6 +318,7 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Wifi
         if (info.groupFormed) {
             Intent intent = new Intent(BroadcastReceiverActivity.this, ChatActivity.class);
             intent.putExtra("info", info);
+            intent.putExtra("name",name);
             startActivityForResult(intent, 1);
         }
 
