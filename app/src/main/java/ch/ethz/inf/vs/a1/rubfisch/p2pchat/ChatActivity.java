@@ -94,14 +94,14 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     public void initialize (){
 
-        Log.d("CHat", "is GroupOwner?" + Boolean.toString(info.isGroupOwner));
+        Log.d("Chat", "is GroupOwner?" + Boolean.toString(info.isGroupOwner));
         if(clients != null) {    clients.clear();}
         if(info.isGroupOwner){
             //wait for clients to make contact and add them to a list
             try {
                 serverSocket = new ServerSocket(PORT);
             }catch(Exception e){
-                Log.d("CHat", "afterServerSocket: "+ e.getMessage());
+                Log.d("Chat", "afterServerSocket: "+ e.getMessage());
 
             }
             getClientInfo.execute();
@@ -113,7 +113,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
 
             }catch(Exception e){
-                Log.d("CHat", "notGroupOwner "+ e.getMessage());
+                Log.d("Chat", "notGroupOwner "+ e.getMessage());
 
                 e.printStackTrace();
             }
@@ -134,16 +134,18 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 fromGroupOwner = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 toGroupOwner = new PrintWriter(socket.getOutputStream(), true);
                 toGroupOwner.println(name);
+                Log.d("Chat","Name sent to Owner");
             }
              catch (IOException e)
             {
+                Log.d("Chat","Exception in connectToOwner" + e.getMessage());
                 e.printStackTrace();
             }
             return null;
 
         }
         @Override
-        protected void onPostExecute(Void v){ listenToGroupOwner.execute(); }
+        protected void onPostExecute(Void v){ listenToGroupOwner.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR); }
     };
 
 
@@ -172,6 +174,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
             }catch(Exception e){
+                Log.d("Chat","Exception in getClientInfo" + e.getMessage());
                 e.printStackTrace();
             }
 
@@ -184,13 +187,16 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         protected Void doInBackground(Void... voids) {
             try{
+                Log.d("Chat","Started listening to GroupOwner");
                 while(true){
                     String data;
                     if((data = fromGroupOwner.readLine()) != null){
+                        Log.d("Chat","Calling receive");
                         receive(data);
                     }
                 }
             }catch(Exception e){
+                Log.d("Chat","Exception in listenToGroupOwner" + e.getMessage());
                 e.printStackTrace();
             }
             return null;
@@ -232,22 +238,24 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 protected Void doInBackground(ChatMessage... chatMessage)
                 {
+                    Log.d("Chat","Sending Message");
                     if(info.isGroupOwner){
                         for (ChatClient client:clients) {
                             PrintWriter dataOut = client.getDataOut();
                             dataOut.println(chatMessage[0].getJSONString(name));
-                            //dataOut.println("test1");
+                            Log.d("Chat","Group Owner sent Message");
                         }
                     } else {
                         toGroupOwner.println(chatMessage[0].getJSONString(name));
-                        //toGroupOwner.println("test2");
+                        Log.d("Chat","Client sent message");
                     }
                     return null;
 
                 }
 
             };
-            sendMessage.execute(chatMessage);
+            Log.d("Chat","Executing sendMessage");
+            sendMessage.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,chatMessage);
 
 
         }
@@ -285,6 +293,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     */
     public static void receive(String data){
         ChatMessage chatMessage = new ChatMessage(data);
+        Log.d("Chat","received something");
         Log.d("Chat",chatMessage.getText());
         Messages.add(chatMessage);
         updateOnMain();
@@ -324,7 +333,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         UIHandler.post(new Runnable() {
             @Override
             public void run() {
+                Log.d("Chat","notifying adapter");
                 adapter.notifyDataSetChanged();
+                Log.d("Chat","adapter notifyed");
             }
         });
     }
