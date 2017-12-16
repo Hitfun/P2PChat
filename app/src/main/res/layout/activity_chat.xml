@@ -19,11 +19,6 @@
         android:stackFromBottom="true"
         android:background="@android:color/white"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="5dp"
-        android:background="@color/MyOrange"
-        android:layout_marginTop="10dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,36 +26,38 @@
         android:layout_weight="1.2"
         android:orientation="horizontal"
         android:weightSum="6"
-        android:background="@color/MyOrange">
+        android:layout_marginTop="5dp"
+        android:background="@color/colorLightGrey">
 
         <EditText
             android:id="@+id/editText"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:background="@android:color/white"
             android:layout_weight="5"
             android:ems="10"
             android:imeOptions="actionSend"
-            android:inputType="textMultiLine" />
-        <!--
-        <Button
-            android:id="@+id/send"
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="1.5"
-            android:text="Send" /> -->
+            android:inputType="textMultiLine"
+            android:background="@drawable/etext_background"
+            android:layout_margin="4dp"
+            android:padding="5dp"/>
+
+
 
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight="1">
-                <ImageButton
-                    android:id="@+id/send"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_send_white_48dp"
-                    android:background="@null"
-                    android:layout_centerInParent="true"/>
+
+            dassasd
+            <ImageButton
+                android:id="@+id/send"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:src="@drawable/ic_send_white_48dp"
+                android:backgroundTint="@color/MyOrange"
+                android:layout_centerInParent="true"/>/>
+
+
         </RelativeLayout>
 
 

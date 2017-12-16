@@ -1,6 +1,7 @@
 package ch.ethz.inf.vs.a1.rubfisch.p2pchat;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.wifi.p2p.WifiP2pInfo;
@@ -9,7 +10,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.Time;
 import android.util.Log;
@@ -22,21 +22,15 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 public class ChatActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -78,6 +72,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         listView.setAdapter(adapter);
 
         clients=new ArrayList<>();
+
+        //force portrait view
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         //TODO: Get the P2pManager and Channel Objects and your own name for the connection information
         Intent intent = getIntent();
