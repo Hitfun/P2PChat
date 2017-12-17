@@ -266,19 +266,23 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             case android.R.id.home:
                 onBackPressed();
                 return true;
-            case R.id.add_people:
+
+            //case R.id.add_people:
+
                 // TODO: Add action of adding people to the chat: call InviteUserActvity;
                 //   Also change the title of the activity to include the new ChatPartner: getSupportActionBar().setTitle("");                                                                   */
-                return true;
+               // return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds our add_people button to the action bar
-        getMenuInflater().inflate(R.menu.menu, menu);
+        //getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 
