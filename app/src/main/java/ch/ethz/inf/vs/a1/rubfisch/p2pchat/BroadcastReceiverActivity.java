@@ -326,7 +326,7 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Wifi
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1) {
+
             if (mManager != null && mChannel != null) {
                 mManager.requestGroupInfo(mChannel, new WifiP2pManager.GroupInfoListener() {
                     @Override
@@ -347,7 +347,7 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Wifi
                     }
                 });
             }
-        }
+
     }
 
 
