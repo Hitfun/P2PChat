@@ -205,7 +205,7 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Wifi
             }
 
         });
-        receiveConnectRequest.execute();
+        //receiveConnectRequest.execute();
 
 
 
@@ -335,8 +335,7 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Wifi
                             mManager.removeGroup(mChannel, new WifiP2pManager.ActionListener() {
 
                                 @Override
-                                public void onSuccess() {
-                                    Log.d(TAG, "removeGroup onSuccess2 -");
+                                public void onSuccess() {Log.d(TAG, "removeGroup onSuccess2 -");
                                 }
 
                                 @Override

@@ -45,6 +45,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private ServerSocket serverSocket;
     private Socket socket;
     private String name;
+    private String partnerName;
     InetAddress groupOwner = null;
     private int PORT = 8000;
     BufferedReader fromGroupOwner;
@@ -129,8 +130,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 toGroupOwner.println(name);
                 Log.d("Chat","Name sent to Owner");
 
-                String partnerName=fromGroupOwner.readLine();
-                getSupportActionBar().setTitle(partnerName);
+                partnerName=fromGroupOwner.readLine();
 
             }
              catch (IOException e)
@@ -142,7 +142,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         }
         @Override
-        protected void onPostExecute(Void v){ listenToGroupOwner.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR); }
+        protected void onPostExecute(Void v){
+            getSupportActionBar().setTitle(partnerName);
+            listenToGroupOwner.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR); }
     };
 
 
@@ -156,20 +158,16 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d("Chat","Client found");
                 BufferedReader dataIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 PrintWriter dataOut = new PrintWriter(clientSocket.getOutputStream(),true);
-                String clientName = dataIn.readLine();
+                partnerName = dataIn.readLine();
                 dataOut.println(name);
-                ChatClient client = new ChatClient(clientName, dataIn, dataOut);
+                ChatClient client = new ChatClient(partnerName, dataIn, dataOut);
                 client.startListening();
 
                 clients.add(client);
 
                 Log.d("Chat", "client added");
 
-                if(clients.size() == 1){
-                    getSupportActionBar().setTitle(clientName);
-                }else{
-                    getSupportActionBar().setTitle("Group Chat");
-                }
+
 
             }catch(Exception e){
                 Log.d("Chat","Exception in getClientInfo" + e.getMessage());
@@ -179,6 +177,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             return null;
         }
 
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            getSupportActionBar().setTitle(partnerName);
+        }
     };
 
     AsyncTask<Void,Void,Void> listenToGroupOwner = new AsyncTask<Void, Void, Void>() {
@@ -310,13 +312,12 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             }
         }*/
     }
-    /*public void onBackPressed() {
-
-    }*/
+    public void onBackPressed() {
+        this.finish();
+    }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         try{
             if(info.isGroupOwner) {
                 serverSocket.close();
@@ -327,6 +328,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         }catch(Exception e){
 
         }
+        super.onDestroy();
+
 
     }
 
@@ -337,7 +340,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             public void run() {
                 Log.d("Chat","notifying adapter");
                 adapter.notifyDataSetChanged();
-                Log.d("Chat","adapter notifyed");
+                Log.d("Chat","adapter notified");
             }
         });
     }
