@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -181,6 +182,9 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Wifi
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
                                     long arg3) {
                 Log.d(TAG, "item clicked");
+
+                Toast.makeText(getApplicationContext(), "Connecting...", Toast.LENGTH_LONG ).show();
+
                 //Get string from textview
                 TextView tv = ((LinearLayout) arg1).findViewById(R.id.textView);
                 WifiP2pDevice device = null;
