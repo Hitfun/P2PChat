@@ -97,6 +97,11 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Wifi
         View bv = findViewById(R.id.broadcastActivity);
         bv.setBackgroundColor(getResources().getColor(R.color.colorLightGrey));
 
+        View root = bv.getRootView();
+
+        // Set the color
+        root.setBackgroundColor(getResources().getColor(R.color.colorLightGrey));
+
 
 
         // get name entered by user in MainActivity
