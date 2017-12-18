@@ -328,7 +328,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = new Intent(ChatActivity.this, BroadcastReceiverActivity.class);
         intent.putExtra("nameText", name);
         startActivity(intent);
-
         this.finish();
     }
 

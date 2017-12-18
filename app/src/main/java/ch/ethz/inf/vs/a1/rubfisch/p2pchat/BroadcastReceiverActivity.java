@@ -13,6 +13,7 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -314,6 +315,7 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Wifi
 
     @Override
     public void onConnectionInfoAvailable(WifiP2pInfo info) {
+
         Log.d(TAG, "pre connect " + Boolean.toString(info.groupFormed));
         if (info.groupFormed) {
             Intent intent = new Intent(BroadcastReceiverActivity.this, ChatActivity.class);
