@@ -154,6 +154,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
             try{
                 Log.d("Chat","waiting for client");
+
                 Socket clientSocket = serverSocket.accept();
                 Log.d("Chat","Client found");
                 BufferedReader dataIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -313,6 +314,21 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         }*/
     }
     public void onBackPressed() {
+        try{
+            if(info.isGroupOwner) {
+                serverSocket.close();
+            }else{
+                socket.close();
+
+            }
+        }catch(Exception e){
+
+        }
+
+        Intent intent = new Intent(ChatActivity.this, BroadcastReceiverActivity.class);
+        intent.putExtra("nameText", name);
+        startActivity(intent);
+
         this.finish();
     }
 

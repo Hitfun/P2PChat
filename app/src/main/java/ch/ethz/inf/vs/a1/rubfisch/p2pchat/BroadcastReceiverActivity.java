@@ -402,6 +402,7 @@ public class BroadcastReceiverActivity extends AppCompatActivity implements Wifi
                             Intent intent = new Intent(BroadcastReceiverActivity.this, ChatActivity.class);
                             //TODO: Give necessary info to intent.
                             startActivity(intent);
+                            finish();
                             Log.d(TAG, "Transitioning to Chat Activity");
                             break;
                         }
